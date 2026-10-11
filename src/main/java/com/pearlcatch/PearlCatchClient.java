@@ -18,6 +18,9 @@ public class PearlCatchClient implements ClientModInitializer {
 
     private static KeyBinding catchKey;
 
+    private static final KeyBinding.Category CATEGORY =
+            KeyBinding.Category.create("key.categories.pearlcatch");
+
     // -1 = ничего не делаем, 0 = кинуть перл, 1 = кинуть винчардж, 2 = вернуть слот
     private int stage = -1;
     private int returnSlot = 0;
@@ -28,7 +31,7 @@ public class PearlCatchClient implements ClientModInitializer {
                 "key.pearlcatch.catch",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_G,              // дефолтный бинд — G, меняется в настройках управления
-                "key.categories.pearlcatch"));
+                CATEGORY));
 
         ClientTickEvents.END_CLIENT_TICK.register(this::onTick);
     }
@@ -64,7 +67,7 @@ public class PearlCatchClient implements ClientModInitializer {
                 stage = 2; // слот вернётся на следующем тике
             }
             case 2 -> {
-                player.getInventory().selectedSlot = returnSlot;
+                player.getInventory().setSelectedSlot(returnSlot);
                 player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(returnSlot));
                 stage = -1;
             }
@@ -78,7 +81,7 @@ public class PearlCatchClient implements ClientModInitializer {
         if (player.isSpectator()) return;
         if (player.isUsingItem()) return;           // не рвём зажатие ЛКМ/еду/лук
         if (stage >= 0) return;                     // последовательность уже идёт
-        returnSlot = player.getInventory().selectedSlot;
+        returnSlot = player.getInventory().getSelectedSlot();
         stage = 0;
     }
 
@@ -92,7 +95,7 @@ public class PearlCatchClient implements ClientModInitializer {
     // Надёжный способ: сами ставим слот, сами шлём пакет, сами вызываем использование.
     // Никаких имитаций клавиш — порядок пакетов гарантирован TCP.
     private static void selectAndUse(MinecraftClient client, ClientPlayerEntity player, int slot) {
-        player.getInventory().selectedSlot = slot;
+        player.getInventory().setSelectedSlot(slot);
         player.networkHandler.sendPacket(new UpdateSelectedSlotC2SPacket(slot));
         client.interactionManager.interactItem(player, Hand.MAIN_HAND);
     }
