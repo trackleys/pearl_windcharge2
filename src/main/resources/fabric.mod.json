@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "pearlcatch",
+  "version": "${version}",
+  "name": "PearlCatch",
+  "description": "Бинд на pearl-catch: эндер-жемчуг сразу за ним ветряной заряд.",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.pearlcatch.PearlCatchClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "fabric-api": "*",
+    "minecraft": "1.21.11",
+    "java": ">=21"
+  }
+}
