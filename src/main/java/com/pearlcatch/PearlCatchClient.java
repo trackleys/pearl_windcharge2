@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Hand;
 import org.lwjgl.glfw.GLFW;
 
@@ -18,8 +19,8 @@ public class PearlCatchClient implements ClientModInitializer {
 
     private static KeyBinding catchKey;
 
-    private static final KeyBinding.Category CATEGORY =
-            KeyBinding.Category.create("key.categories.pearlcatch");
+        private static final KeyBinding.Category CATEGORY =
+            KeyBinding.Category.create(Identifier.of("pearlcatch", "main"));
 
     // -1 = ничего не делаем, 0 = кинуть перл, 1 = кинуть винчардж, 2 = вернуть слот
     private int stage = -1;
